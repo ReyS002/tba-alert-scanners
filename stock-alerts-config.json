@@ -1,0 +1,80 @@
+{
+  "settings": {
+    "dedup_hours": 24,
+    "description": "Stock alert scanner — VPS-native. Scans for MA crosses, NR7, elephant bars, volume spikes."
+  },
+  "tickers": [
+    {
+      "symbol": "SPY", "name": "SPDR S&P 500",
+      "alerts": [
+        {"id": "spy_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "SPY crossed above 20MA"},
+        {"id": "spy_ma50_cross", "type": "ma_cross_50", "setup": "trend", "message": "SPY crossed above 50MA"},
+        {"id": "spy_golden", "type": "golden_cross", "setup": "trend", "message": "SPY 50/200 golden cross"},
+        {"id": "spy_elephant", "type": "elephant_bar", "setup": "velez_elephant", "message": "SPY elephant bar"},
+        {"id": "spy_vol", "type": "volume_spike", "setup": "volume", "message": "SPY volume spike", "params": {"min_vol_ratio": 2.0}}
+      ]
+    },
+    {
+      "symbol": "QQQ", "name": "Invesco QQQ",
+      "alerts": [
+        {"id": "qqq_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "QQQ crossed above 20MA"},
+        {"id": "qqq_ma50_cross", "type": "ma_cross_50", "setup": "trend", "message": "QQQ crossed above 50MA"},
+        {"id": "qqq_elephant", "type": "elephant_bar", "setup": "velez_elephant", "message": "QQQ elephant bar"},
+        {"id": "qqq_nr7", "type": "nr7", "setup": "nr7", "message": "QQQ NR7 compression"}
+      ]
+    },
+    {
+      "symbol": "AAPL", "name": "Apple",
+      "alerts": [
+        {"id": "aapl_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "AAPL crossed above 20MA"},
+        {"id": "aapl_elephant", "type": "elephant_bar", "setup": "velez_elephant", "message": "AAPL elephant bar"}
+      ]
+    },
+    {
+      "symbol": "NVDA", "name": "NVIDIA",
+      "alerts": [
+        {"id": "nvda_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "NVDA crossed above 20MA"},
+        {"id": "nvda_vol", "type": "volume_spike", "setup": "volume", "message": "NVDA volume spike", "params": {"min_vol_ratio": 2.0}}
+      ]
+    },
+    {
+      "symbol": "TSLA", "name": "Tesla",
+      "alerts": [
+        {"id": "tsla_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "TSLA crossed above 20MA"},
+        {"id": "tsla_elephant", "type": "elephant_bar", "setup": "velez_elephant", "message": "TSLA elephant bar"}
+      ]
+    },
+    {
+      "symbol": "MSFT", "name": "Microsoft",
+      "alerts": [
+        {"id": "msft_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "MSFT crossed above 20MA"}
+      ]
+    },
+    {
+      "symbol": "IWM", "name": "iShares Russell 2000",
+      "alerts": [
+        {"id": "iwm_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "IWM crossed above 20MA"},
+        {"id": "iwm_nr7", "type": "nr7", "setup": "nr7", "message": "IWM NR7 compression"}
+      ]
+    },
+    {
+      "symbol": "AMD", "name": "Advanced Micro Devices",
+      "alerts": [
+        {"id": "amd_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "AMD crossed above 20MA"}
+      ]
+    },
+    {
+      "symbol": "AMZN", "name": "Amazon",
+      "alerts": [
+        {"id": "amzn_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "AMZN crossed above 20MA"},
+        {"id": "amzn_elephant", "type": "elephant_bar", "setup": "velez_elephant", "message": "AMZN elephant bar"}
+      ]
+    },
+    {
+      "symbol": "META", "name": "Meta Platforms",
+      "alerts": [
+        {"id": "meta_ma20_cross", "type": "ma_cross_20", "setup": "ma_cross", "message": "META crossed above 20MA"}
+      ]
+    }
+  ]
+}

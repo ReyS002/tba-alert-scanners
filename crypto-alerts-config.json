@@ -1,0 +1,87 @@
+{
+  "pairs": [
+    {
+      "symbol": "BTCUSDT",
+      "name": "Bitcoin",
+      "alerts": [
+        {
+          "id": "btc-20ma-reclaim",
+          "type": "ma_cross",
+          "condition": "close crosses above 20MA on 1H",
+          "params": { "ma_period": 20, "direction": "cross_above" },
+          "setup": "ma_reclaim",
+          "message": "BTC reclaimed its 20MA on the 1H chart — primary Velez momentum anchor signal."
+        },
+        {
+          "id": "btc-nr7-compression",
+          "type": "nr7",
+          "condition": "narrowest range in 7 bars + close above 20MA",
+          "params": { "lookback": 7 },
+          "setup": "compression_breakout",
+          "message": "BTC formed its tightest 1H range in 7 candles — compression before expansion."
+        }
+      ]
+    },
+    {
+      "symbol": "SOLUSDT",
+      "name": "Solana",
+      "alerts": [
+        {
+          "id": "sol-elephant-bar",
+          "type": "elephant_bar",
+          "condition": "bullish candle, lower wick 2x body, volume 1.5x average",
+          "params": { "wick_ratio": 2.0, "volume_mult": 1.5 },
+          "setup": "elephant_bar",
+          "message": "SOL printed an elephant bar on 1H — large lower wick with volume surge. Reversal signal."
+        }
+      ]
+    },
+    {
+      "symbol": "ETHUSDT",
+      "name": "Ethereum",
+      "alerts": [
+        {
+          "id": "eth-1900-reclaim",
+          "type": "price_cross",
+          "condition": "close crosses above 1900",
+          "params": { "level": 1900, "direction": "cross_above" },
+          "setup": "ma_reclaim",
+          "message": "ETH reclaimed the $1,900 level on 1H — psychological round number and prior support."
+        }
+      ]
+    },
+    {
+      "symbol": "BNBUSDT",
+      "name": "Binance Coin",
+      "alerts": [
+        {
+          "id": "bnb-leadership",
+          "type": "price_cross",
+          "condition": "close crosses above 660",
+          "params": { "level": 660, "direction": "cross_above" },
+          "setup": "compression_breakout",
+          "message": "BNB broke above 660 on 1H — relative strength leadership signal. Least damaged major."
+        }
+      ]
+    },
+    {
+      "symbol": "ADAUSDT",
+      "name": "Cardano",
+      "alerts": [
+        {
+          "id": "ada-nr7-reversal",
+          "type": "nr7",
+          "condition": "narrowest range in 7 bars, price under 0.22",
+          "params": { "lookback": 7, "max_price": 0.22 },
+          "setup": "nr7",
+          "message": "ADA formed NR7 under 0.22 on 1H — deep value compression. Max grade C, tight risk required."
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "dedup_hours": 24,
+    "data_source": "binance_us",
+    "telegram_notify": true
+  }
+}

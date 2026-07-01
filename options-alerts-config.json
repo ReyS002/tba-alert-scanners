@@ -1,0 +1,17 @@
+{
+  "settings": {
+    "dedup_hours": 24
+  },
+  "tickers": [
+    {"symbol": "SPY",  "name": "SPY",  "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.10, "max_delta": 0.35},
+    {"symbol": "QQQ",  "name": "QQQ",  "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.10, "max_delta": 0.35},
+    {"symbol": "IWM",  "name": "IWM",  "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.10, "max_delta": 0.35},
+    {"symbol": "AAPL", "name": "AAPL", "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.10, "max_delta": 0.35},
+    {"symbol": "NVDA", "name": "NVDA", "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.15, "max_delta": 0.35},
+    {"symbol": "TSLA", "name": "TSLA", "scan_puts": true, "scan_calls": true, "min_roi": 20, "min_yield": 20, "min_premium": 0.20, "max_delta": 0.30},
+    {"symbol": "AMD",  "name": "AMD",  "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.10, "max_delta": 0.35},
+    {"symbol": "META", "name": "META", "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.15, "max_delta": 0.35},
+    {"symbol": "AMZN", "name": "AMZN", "scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.15, "max_delta": 0.35},
+    {"symbol": "GOOGL","name": "GOOGL","scan_puts": true, "scan_calls": true, "min_roi": 15, "min_yield": 15, "min_premium": 0.15, "max_delta": 0.35}
+  ]
+}

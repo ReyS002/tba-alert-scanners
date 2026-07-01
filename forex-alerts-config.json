@@ -1,0 +1,60 @@
+{
+  "settings": {
+    "dedup_hours": 24,
+    "description": "Forex alert scanner — VPS-native. Scans for MA crosses, ATR breakouts, NR7 on major pairs."
+  },
+  "pairs": [
+    {
+      "symbol": "EURUSD", "name": "EUR/USD", "yahoo_symbol": "EURUSD=X",
+      "alerts": [
+        {"id": "eurusd_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "EUR/USD crossed above 20MA"},
+        {"id": "eurusd_ma50", "type": "ma_cross_50", "setup": "trend", "message": "EUR/USD crossed above 50MA"},
+        {"id": "eurusd_atr", "type": "atr_breakout", "setup": "atr_breakout", "message": "EUR/USD ATR breakout from 20MA", "params": {"atr_mult": 1.5}}
+      ]
+    },
+    {
+      "symbol": "GBPUSD", "name": "GBP/USD", "yahoo_symbol": "GBPUSD=X",
+      "alerts": [
+        {"id": "gbpusd_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "GBP/USD crossed above 20MA"},
+        {"id": "gbpusd_atr", "type": "atr_breakout", "setup": "atr_breakout", "message": "GBP/USD ATR breakout from 20MA", "params": {"atr_mult": 1.5}}
+      ]
+    },
+    {
+      "symbol": "USDJPY", "name": "USD/JPY", "yahoo_symbol": "USDJPY=X",
+      "alerts": [
+        {"id": "usdjpy_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "USD/JPY crossed above 20MA"},
+        {"id": "usdjpy_nr7", "type": "nr7", "setup": "nr7", "message": "USD/JPY NR7 compression"}
+      ]
+    },
+    {
+      "symbol": "AUDUSD", "name": "AUD/USD", "yahoo_symbol": "AUDUSD=X",
+      "alerts": [
+        {"id": "audusd_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "AUD/USD crossed above 20MA"}
+      ]
+    },
+    {
+      "symbol": "USDCAD", "name": "USD/CAD", "yahoo_symbol": "USDCAD=X",
+      "alerts": [
+        {"id": "usdcad_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "USD/CAD crossed above 20MA"}
+      ]
+    },
+    {
+      "symbol": "NZDUSD", "name": "NZD/USD", "yahoo_symbol": "NZDUSD=X",
+      "alerts": [
+        {"id": "nzdusd_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "NZD/USD crossed above 20MA"}
+      ]
+    },
+    {
+      "symbol": "EURGBP", "name": "EUR/GBP", "yahoo_symbol": "EURGBP=X",
+      "alerts": [
+        {"id": "eurgbp_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "EUR/GBP crossed above 20MA"}
+      ]
+    },
+    {
+      "symbol": "USDCHF", "name": "USD/CHF", "yahoo_symbol": "USDCHF=X",
+      "alerts": [
+        {"id": "usdchf_ma20", "type": "ma_cross_20", "setup": "ma_cross", "message": "USD/CHF crossed above 20MA"}
+      ]
+    }
+  ]
+}

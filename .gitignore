@@ -1,0 +1,12 @@
+# Credentials and tokens
+tba.env
+*.token
+*.secret
+.env
+
+# Runtime state
+state/
+
+# Python cache
+__pycache__/
+*.pyc
