@@ -3,6 +3,7 @@
 # Uses TBE's Tradier-powered options chains + Velez bar filters
 # Credentials: set OPTIONS_FWD_BOT_TOKEN and OPTIONS_FWD_CHANNEL_ID in tba.env
 set -euo pipefail
+export PATH="/usr/local/lib/hermes-agent/venv/bin:$PATH"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/tba.env" 2>/dev/null || true

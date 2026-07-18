@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export PATH="/usr/local/lib/hermes-agent/venv/bin:$PATH"
 source /opt/scripts/tba/tba.env
 source /root/.hermes/.env 2>/dev/null
 CONFIG="/opt/scripts/tba/stock-alerts-config.json"
@@ -8,6 +9,14 @@ mkdir -p "$STATE_DIR"
 python3 - "$CONFIG" "$STATE_DIR" <<'PY'
 import sys,json,os,urllib.request
 from datetime import datetime,timezone,timedelta
+from zoneinfo import ZoneInfo
+
+# ── Market-hours gate (US Eastern, DST-aware) — NYSE 9:30–16:00 Mon–Fri ──
+now_et = datetime.now(ZoneInfo("America/New_York"))
+if now_et.weekday() >= 5 or not (9, 30) <= (now_et.hour, now_et.minute) < (16, 0):
+    print("AFTER_HOURS")
+    sys.exit(0)
+
 config_file = sys.argv[1]; state_dir = sys.argv[2]
 with open(config_file) as f: config = json.load(f)
 dedup_hours = config["settings"].get("dedup_hours", 24)

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export PATH="/usr/local/lib/hermes-agent/venv/bin:$PATH"
 source /opt/scripts/tba/tba.env
 CONFIG="/opt/scripts/tba/crypto-alerts-config.json"
 [ -f "$CONFIG" ] || { echo "No config at $CONFIG"; exit 0; }
@@ -11,17 +12,61 @@ config_file=sys.argv[1]; state_dir=sys.argv[2]
 with open(config_file) as f: config=json.load(f)
 dedup_hours=config["settings"].get("dedup_hours",24)
 alerts_fired=[]
+
+# ── CoinGecko symbol map ─────────────────────────────────────────────────────
+# Maps Binance symbols to CoinGecko coin IDs
+COINGECKO_MAP = {
+    "BTCUSDT": "bitcoin",
+    "ETHUSDT": "ethereum",
+    "BNBUSDT": "binancecoin",
+    "SOLUSDT": "solana",
+    "ADAUSDT": "cardano",
+    "XRPUSDT": "ripple",
+    "DOGEUSDT": "dogecoin",
+    "DOTUSDT": "polkadot",
+}
+
 for pair in config["pairs"]:
     symbol=pair["symbol"]; name=pair["name"]
+    closes=[]; highs=[]; lows=[]; volumes=[]
+    data_source="none"
+
+    # Primary: Binance
     try:
         url=f"https://api.binance.us/api/v3/klines?symbol={symbol}&interval=1h&limit=250"
         with urllib.request.urlopen(urllib.request.Request(url,headers={"Accept":"application/json"}),timeout=15) as resp:
             raw=json.loads(resp.read())
+        if raw and len(raw)>=50:
+            closes=[float(c[4]) for c in raw]
+            highs=[float(c[2]) for c in raw]
+            lows=[float(c[3]) for c in raw]
+            volumes=[float(c[5]) for c in raw]
+            data_source="binance"
     except Exception as e:
-        print(f"SKIP {symbol}: {e}",file=sys.stderr); continue
-    if not raw or len(raw)<50:
-        print(f"SKIP {symbol}: {len(raw)} bars",file=sys.stderr); continue
-    closes=[float(c[4]) for c in raw]; highs=[float(c[2]) for c in raw]; lows=[float(c[3]) for c in raw]; volumes=[float(c[5]) for c in raw]
+        print(f"Binance SKIP {symbol}: {e}",file=sys.stderr)
+
+    # Fallback: CoinGecko (if Binance failed or returned insufficient data)
+    if len(closes) < 50:
+        coin_id = COINGECKO_MAP.get(symbol)
+        if coin_id:
+            try:
+                url=f"https://api.coingecko.com/api/v3/coins/{coin_id}/ohlc?days=30&vs_currency=usd"
+                with urllib.request.urlopen(urllib.request.Request(url,headers={"Accept":"application/json"}),timeout=15) as resp:
+                    raw=json.loads(resp.read())
+                if raw and len(raw)>=50:
+                    # CoinGecko returns [[timestamp, open, high, low, close], ...]
+                    closes=[float(c[4]) for c in raw]
+                    highs=[float(c[2]) for c in raw]
+                    lows=[float(c[3]) for c in raw]
+                    volumes=[0 for _ in raw]  # CoinGecko OHLC endpoint doesn't include volume
+                    data_source="coingecko"
+                    print(f"FALLBACK {symbol}: using CoinGecko ({len(raw)} candles)", file=sys.stderr)
+            except Exception as e2:
+                print(f"CoinGecko SKIP {symbol}: {e2}",file=sys.stderr)
+
+    if len(closes) < 50:
+        print(f"SKIP {symbol}: insufficient data ({len(closes)} bars)",file=sys.stderr); continue
+
     current=closes[-1]; prev=closes[-2] if len(closes)>1 else current
     ma20=sum(closes[-21:-1])/20 if len(closes)>=21 else sum(closes)/len(closes)
     for alert in pair["alerts"]:
@@ -48,18 +93,17 @@ for pair in config["pairs"]:
             if direction=="cross_above" and prev<=level and current>level:
                 fired=True; reason=f"close {current:.2f} crossed above {level}"
         if fired:
-            alerts_fired.append({"id":aid,"symbol":symbol,"name":name,"setup":alert.get("setup",""),"message":alert.get("message",""),"reason":reason,"price":current,"ma20":round(ma20,2)})
+            alerts_fired.append({"id":aid,"symbol":symbol,"name":name,"setup":alert.get("setup",""),"message":alert.get("message",""),"reason":reason,"price":current,"ma20":round(ma20,2),"source":data_source})
             with open(state_file,'w') as f: f.write(datetime.now(timezone.utc).isoformat())
 if alerts_fired:
     lines=["Crypto Alert — Setup Detected\n"]
     for a in alerts_fired:
         lines.append(f"{a['name']} ({a['symbol']}): {a['message']}")
-        lines.append(f"  Setup: {a['setup']} | Price: ${a['price']:.2f} | 20MA: ${a['ma20']}")
+        lines.append(f"  Setup: {a['setup']} | Price: ${a['price']:.2f} | 20MA: ${a['ma20']} | Source: {a['source']}")
         lines.append(f"  {a['reason']}\n")
     lines.append("Paper-only analysis. No execution without owner approval.")
     msg="\n".join(lines)
     subprocess.run(["python3","/opt/scripts/tba/send-telegram.py"],input=msg,text=True)
-    # Forward to @Crypto_TBull_bot channel
     fwd_token = os.environ.get("CRYPTO_FWD_BOT_TOKEN", "")
     fwd_chat_id = os.environ.get("CRYPTO_FWD_CHANNEL_ID", "")
     if fwd_token and fwd_chat_id:

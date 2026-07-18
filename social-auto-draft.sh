@@ -16,7 +16,11 @@ ETH=$(python3 -c "import json,urllib.request; d=json.load(urllib.request.urlopen
 case "$DAY" in 1) THEME="weekly_outlook" ;; 3) THEME="midweek_lesson" ;; 5) THEME="weekend_wisdom" ;; esac
 python3 - "$THEME" "$BTC" "$ETH" "$DATE" "$DRAFTS" <<'PY'
 import sys, json, os
-theme,b tc,eth,date,drafts_dir = sys.argv[1:]
+theme = sys.argv[1]
+btc = sys.argv[2]
+eth = sys.argv[3]
+date = sys.argv[4]
+drafts_dir = sys.argv[5]
 posts = []
 if theme == "weekly_outlook":
     posts = [
